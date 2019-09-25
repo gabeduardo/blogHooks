@@ -7,6 +7,9 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
+import moment from 'moment'
+import DateRanger from '../../features/DateRanger'
+import { Link } from 'react-router-dom'
 import './index.scss'
 
 // file obtained by: curl https://jsonplaceholder.typicode.com/posts > posts.json
@@ -22,6 +25,11 @@ const Posts = () => {
   const [categoryList] = useState(categories)
   const [selectedCategory, setCategory] = useState("")
   const [selectedTextLength, setTextLength] = useState(40)
+  const [dateRange, setDateRange] = useState({
+    // moment() object is expected by react-dates
+    start: moment('2019-01-01T00:00:00'),
+    end: moment(),
+  })
 
   const handleOptionChange = changeEvent => {
     setCategory(changeEvent.target.value)
@@ -35,14 +43,27 @@ const Posts = () => {
     setTextLength(changeEvent)
   }
 
+  const handleDateRange = (range) => {
+    setDateRange(range)
+  }
+
   const thePosts = postList.map(post => {
-    if (selectedCategory === "" || selectedCategory === post.category) {
+    let date1 = Object.assign({}, dateRange.start);
+    let date2 = Object.assign({}, dateRange.end);
+    if (
+      (selectedCategory === "" || selectedCategory === post.category)
+      &&
+      moment(post.postDate).isAfter(moment(date1).subtract('1', 'days')) &&
+      // moment(post.postDate).isBefore(moment(date2).add('1', 'days'))
+      moment(post.postDate).isBefore(moment(date2))
+    ) {
       return <ListGroup.Item
         key={post.id}
         variant="flush">
         <h5>{post.title}</h5>
         {post.body.substr(0, selectedTextLength) + ' ...'}
-        <p><small><strong>{post.category}</strong></small></p>
+        <Link to={`/post/${post.id}`}><strong>read more</strong></Link>
+        <p><small><strong>{post.category}</strong> {moment(post.postDate).format('MM/DD/YYYY')}</small></p>
       </ListGroup.Item>
     } else {
       return null;
@@ -75,6 +96,22 @@ const Posts = () => {
                         </Button>
                 </Form>
               </Card.Body>
+            </Card>
+
+            <Card>
+              <Card.Title className="px-4 pt-0 pb-0">
+                Filter by Date Range
+                </Card.Title>
+              <Card.Text className="ml-4">
+                From: {dateRange.start ? dateRange.start.format('MM/DD/YYYY') : null}
+              </Card.Text>
+              <Card.Text className="ml-4">
+                To: {dateRange.end ? dateRange.end.format('MM/DD/YYYY') : null}
+              </Card.Text>
+              <DateRanger
+                theStartDate={dateRange.start}
+                handleDateRange={handleDateRange}
+                className="DateRanger" />
             </Card>
           </Col>
           <Col>
