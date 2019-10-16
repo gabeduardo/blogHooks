@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { PostListContext } from "../../context"
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -13,15 +14,16 @@ import { Link } from 'react-router-dom'
 import './index.scss'
 
 // file obtained by: curl https://jsonplaceholder.typicode.com/posts > posts.json
-import posts from '../../data/posts.json'
-const categories = ['catagory1', 'category2', 'category3', 'category4']
+//import posts from '../../data/posts.json'
+// const categories = ['catagory1', 'category2', 'category3', 'category4']
 
 // For random number see https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
-const somePosts = posts.slice(0, 8).map(post => { return { ...post, category: categories[Math.floor(Math.random() * 4)] } })
+//const somePosts = posts.slice(0, 8).map(post => { return { ...post, category: categories[Math.floor(Math.random() * 4)] } })
 
 const PostsList = () => {
-    const [postList] = useState(somePosts)
-    const [categoryList] = useState(categories)
+    const context = useContext(PostListContext)
+    const [postList] = useState(context.somePosts)
+    const [categoryList] = useState(context.categories)
     const [selectedCategory, setCategory] = useState("")
     const [selectedTextLength, setTextLength] = useState(40)
     const [dateRange, setDateRange] = useState({

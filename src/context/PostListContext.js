@@ -10,6 +10,7 @@ export const PostListContext = React.createContext({});
 
 export const PostListProvider = props => {
     const [somePosts] = useState({ thePosts });
+    // console.log(somePosts)
     return (
         <PostListContext.Provider value={{ "somePosts": somePosts.thePosts, categories }}>
             <div>{props.children}</div>
