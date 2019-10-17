@@ -12,7 +12,5 @@ A react blog using the new [Hooks] feature
 * Responsive theme using react-bootstrap
 * Custom style of react-bootsrap 
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
