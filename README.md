@@ -1,4 +1,4 @@
-# Project Title
+# React Blog using hooks 
 
 A react blog using the new [Hooks] feature  
 
